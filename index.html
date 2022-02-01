@@ -1,0 +1,2447 @@
+<!doctype html>
+<html>
+<head>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/react/0.12.2/react-with-addons.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/react/0.12.2/JSXTransformer.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/react-router/0.11.6/react-router.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/3.7.0/lodash.js"></script>
+	<link rel="stylesheet" type="text/css" href="fonts/fonts.css">
+	<link rel="stylesheet" type="text/css" href="css/style.css">
+	<link rel="stylesheet" type="text/css" href="css/game.css">	
+	<link rel="stylesheet" type="text/css" href="css/player.css">
+	<title>Play Aphador</title>
+</head>
+
+<body>
+
+	<div id="app">
+	</div>
+
+	<script type="text/jsx">
+
+		var Router        = window.ReactRouter;
+		var Link          = Router.Link;
+		var Route         = Router.Route;
+		var DefaultRoute  = Router.DefaultRoute;
+		var NotFoundRoute = Router.NotFoundRoute;
+		var RouteHandler  = Router.RouteHandler;
+
+//TO DO
+
+//selectcard done
+//turn active player
+//
+
+		var App = React.createClass({
+			
+			render: function() {
+				return (
+					<div className="container">
+					<div className="navigation">
+						 <Link to="home">Play Aphador online!</Link>
+         				 <Link to="rules">Rules</Link>
+					</div>
+						<RouteHandler/>
+					<footer><p>&copy; Robert Dumitrescu &amp; Andreea Cozariuc - 25	May 2015</p></footer>
+					</div>
+				);
+			},
+			
+		});
+
+		var Game = React.createClass({
+			
+			getInitialState: function() {
+				return {
+					game: {
+						numofplayers: 2,
+						turn: 0,
+						lastTurn:false,
+						tokens: {
+							sapphire: 0,
+							emerald: 0,
+							onyx: 0,
+							ruby: 0,
+							diamond: 0, 
+						},
+						gems: {
+							sapphire: "sapphire",
+							emerald: "emerald",
+							onyx: "onyx",
+							ruby: "ruby",
+							diamond: "diamond", 
+							gold: "gold",
+						},
+						cards:[
+							
+						],
+						selectedcardid:-1,
+						nobles: [],
+						reservedCards: {
+							player1: [],
+							player2: [],
+							player3: [],
+							player4: [],
+						},
+					},
+					bank: { 
+						cards: [
+							{
+								tokens: {
+									sapphire: 0,
+									emerald: 1,
+									onyx: 1,
+									ruby: 2,
+									diamond: 1, 
+								},
+								tier: 1,
+								type: "sapphire",
+								points: 0,
+								id:1,
+							},
+							{
+								tokens: {
+									sapphire: 0,
+									emerald: 2,
+									onyx: 0,
+									ruby: 2,
+									diamond: 1, 
+								},
+								tier: 1,
+								type: "sapphire",
+								points: 0,
+								id:2,
+							},
+							{
+								tokens: {
+									sapphire: 0,
+									emerald: 0,
+									onyx: 0,
+									ruby: 4,
+									diamond: 0, 
+								},
+								tier: 1,
+								type: "sapphire",
+								points: 1,
+								id:3,
+							},
+							{
+								tokens: {
+									sapphire: 0,
+									emerald: 2,
+									onyx: 2,
+									ruby: 0,
+									diamond: 0, 
+								},
+								tier: 1,
+								type: "sapphire",
+								points: 0,
+								id:4,
+							},
+							{
+								tokens: {
+									sapphire: 1,
+									emerald: 3,
+									onyx: 0,
+									ruby: 1,
+									diamond: 0, 
+								},
+								tier: 1,
+								type: "sapphire",
+								points: 0,
+								id:5,
+							},
+							{
+								tokens: {
+									sapphire: 0,
+									emerald: 0,
+									onyx: 3,
+									ruby: 0,
+									diamond: 0, 
+								},
+								tier: 1,
+								type: "sapphire",
+								points: 0,
+								id:6,
+							},
+							{
+								tokens: {
+									sapphire: 0,
+									emerald: 0,
+									onyx: 2,
+									ruby: 0,
+									diamond: 1, 
+								},
+								tier: 1,
+								type: "sapphire",
+								points: 0,
+								id:7,
+							},
+							{
+								tokens: {
+									sapphire: 0,
+									emerald: 1,
+									onyx: 1,
+									ruby: 1,
+									diamond: 1, 
+								},
+								tier: 1,
+								type: "sapphire",
+								points: 0,
+								id:8,
+							},
+							{
+								tokens: {
+									sapphire: 0,
+									emerald: 0,
+									onyx: 4,
+									ruby: 0,
+									diamond: 0, 
+								},
+								tier: 1,
+								type: "emerald",
+								points: 1,
+								id:9,
+							},
+							{
+								tokens: {
+									sapphire: 1,
+									emerald: 0,
+									onyx: 1,
+									ruby: 1,
+									diamond: 1, 
+								},
+								tier: 1,
+								type: "emerald",
+								points: 0,
+								id:10,
+							},
+							{
+								tokens: {
+									sapphire: 2,
+									emerald: 0,
+									onyx: 0,
+									ruby: 2,
+									diamond: 0, 
+								},
+								tier: 1,
+								type: "emerald",
+								points: 0,
+								id:12,
+							},
+							{
+								tokens: {
+									sapphire: 3,
+									emerald: 1,
+									onyx: 0,
+									ruby: 0,
+									diamond: 1, 
+								},
+								tier: 1,
+								type: "emerald",
+								points: 0,
+								id:13,
+							},
+							{
+								tokens: {
+									sapphire: 1,
+									emerald: 0,
+									onyx: 0,
+									ruby: 0,
+									diamond: 2, 
+								},
+								tier: 1,
+								type: "emerald",
+								points: 0,
+								id:14,
+							},
+							{
+								tokens: {
+									sapphire: 0,
+									emerald: 0,
+									onyx: 0,
+									ruby: 3,
+									diamond: 0, 
+								},
+								tier: 1,
+								type: "emerald",
+								points: 0,
+								id:15,
+							},
+							{
+								tokens: {
+									sapphire: 1,
+									emerald: 0,
+									onyx: 2,
+									ruby: 1,
+									diamond: 1, 
+								},
+								tier: 1,
+								type: "emerald",
+								points: 0,
+								id:16,
+							},
+							{
+								tokens: {//am ratat
+									sapphire: 1,
+									emerald: 0,
+									onyx: 2,
+									ruby: 2,
+									diamond: 0, 
+								},
+								tier: 1,
+								type: "emerald",
+								points: 0,
+								id:11,
+							},
+							{
+								tokens: {
+									sapphire: 0,
+									emerald: 4,
+									onyx: 0,
+									ruby: 0,
+									diamond: 0, 
+								},
+								tier: 1,
+								type: "diamond",
+								points: 1,
+								id:17,
+							},
+							{
+								tokens: {
+									sapphire: 3,
+									emerald: 0,
+									onyx: 0,
+									ruby: 0,
+									diamond: 0, 
+								},
+								tier: 1,
+								type: "diamond",
+								points: 0,
+								id:18,
+							},
+							{
+								tokens: {
+									sapphire: 0,
+									emerald: 0,
+									onyx: 1,
+									ruby: 2,
+									diamond: 0, 
+								},
+								tier: 1,
+								type: "diamond",
+								points: 0,
+								id:19,
+							},
+							{
+								tokens: {
+									sapphire: 2,
+									emerald: 2,
+									onyx: 1,
+									ruby: 0,
+									diamond: 0, 
+								},
+								tier: 1,
+								type: "diamond",
+								points: 0,
+								id:20,
+							},
+							{
+								tokens: {
+									sapphire: 1,
+									emerald: 0,
+									onyx: 1,
+									ruby: 0,
+									diamond: 3, 
+								},
+								tier: 1,
+								type: "diamond",
+								points: 0,
+								id:21,
+							},
+							{
+								tokens: {
+									sapphire: 1,
+									emerald: 2,
+									onyx: 1,
+									ruby: 1,
+									diamond: 0, 
+								},
+								tier: 1,
+								type: "diamond",
+								points: 0,
+								id:22,
+							},
+							{
+								tokens: {
+									sapphire: 1,
+									emerald: 1,
+									onyx: 1,
+									ruby: 1,
+									diamond: 0, 
+								},
+								tier: 1,
+								type: "diamond",
+								points: 0,
+								id:23,
+							},
+							{
+								tokens: {
+									sapphire: 2,
+									emerald: 0,
+									onyx: 2,
+									ruby: 0,
+									diamond: 0, 
+								},
+								tier: 1,
+								type: "diamond",
+								points: 0,
+								id:24,
+							},
+							{
+								tokens: {
+									sapphire: 2,
+									emerald: 0,
+									onyx: 0,
+									ruby: 1,
+									diamond: 2, 
+								},
+								tier: 1,
+								type: "onyx",
+								points: 0,
+								id:25,
+							},
+							{
+								tokens: {
+									sapphire: 0,
+									emerald: 2,
+									onyx: 0,
+									ruby: 1,
+									diamond: 0, 
+								},
+								tier: 1,
+								type: "onyx",
+								points: 0,
+								id:26,
+							},
+							{
+								tokens: {
+									sapphire: 4,
+									emerald: 0,
+									onyx: 0,
+									ruby: 0,
+									diamond: 0, 
+								},
+								tier: 1,
+								type: "onyx",
+								points: 1,
+								id:27,
+							},
+							{
+								tokens: {
+									sapphire: 1,
+									emerald: 1,
+									onyx: 0,
+									ruby: 1,
+									diamond: 1, 
+								},
+								tier: 1,
+								type: "onyx",
+								points: 0,
+								id:28,
+							},
+							{
+								tokens: {
+									sapphire: 0,
+									emerald: 3,
+									onyx: 0,
+									ruby: 0,
+									diamond: 0, 
+								},
+								tier: 1,
+								type: "onyx",
+								points: 0,
+								id:29,
+							},
+							{
+								tokens: {
+									sapphire: 0,
+									emerald: 2,
+									onyx: 0,
+									ruby: 0,
+									diamond: 2, 
+								},
+								tier: 1,
+								type: "onyx",
+								points: 0,
+								id:30,
+							},
+							{
+								tokens: {
+									sapphire: 2,
+									emerald: 1,
+									onyx: 0,
+									ruby: 1,
+									diamond: 1, 
+								},
+								tier: 1,
+								type: "onyx",
+								points: 0,
+								id:31,
+							},
+							{
+								tokens: {
+									sapphire: 0,
+									emerald: 1,
+									onyx: 1,
+									ruby: 3,
+									diamond: 0, 
+								},
+								tier: 1,
+								type: "onyx",
+								points: 0,
+								id:32,
+							},
+							{
+								tokens: {
+									sapphire: 0,
+									emerald: 0,
+									onyx: 0,
+									ruby: 0,
+									diamond: 3, 
+								},
+								tier: 1,
+								type: "ruby",
+								points: 0,
+								id:33,
+							},
+							{
+								tokens: {
+									sapphire: 1,
+									emerald: 1,
+									onyx: 1,
+									ruby: 0,
+									diamond: 2, 
+								},
+								tier: 1,
+								type: "ruby",
+								points: 0,
+								id:34,
+							},
+							{
+								tokens: {
+									sapphire: 0,
+									emerald: 0,
+									onyx: 3,
+									ruby: 1,
+									diamond: 1, 
+								},
+								tier: 1,
+								type: "ruby",
+								points: 0,
+								id:35,
+							},
+							{
+								tokens: {
+									sapphire: 1,
+									emerald: 1,
+									onyx: 1,
+									ruby: 0,
+									diamond: 1, 
+								},
+								tier: 1,
+								type: "ruby",
+								points: 0,
+								id:36,
+							},
+							{
+								tokens: {
+									sapphire: 0,
+									emerald: 0,
+									onyx: 0,
+									ruby: 2,
+									diamond: 2, 
+								},
+								tier: 1,
+								type: "ruby",
+								points: 0,
+								id:37,
+							},
+							{
+								tokens: {
+									sapphire: 2,
+									emerald: 1,
+									onyx: 0,
+									ruby: 0,
+									diamond: 0, 
+								},
+								tier: 1,
+								type: "ruby",
+								points: 0,
+								id:38,
+							},
+							{
+								tokens: {
+									sapphire: 0,
+									emerald: 1,
+									onyx: 2,
+									ruby: 0,
+									diamond: 2, 
+								},
+								tier: 1,
+								type: "ruby",
+								points: 0,
+								id:39,
+							},
+							{
+								tokens: {
+									sapphire: 0,
+									emerald: 0,
+									onyx: 0,
+									ruby: 0,
+									diamond: 4, 
+								},
+								tier: 1,
+								type: "ruby",
+								points: 1,
+								id:40,
+							},
+							{
+								tokens: {
+									sapphire: 4,
+									emerald: 2,
+									onyx: 0,
+									ruby: 0,
+									diamond: 1, 
+								},
+								tier: 2,
+								type: "ruby",
+								points: 2,
+								id:41,
+							},
+							{
+								tokens: {
+									sapphire: 0,
+									emerald: 0,
+									onyx: 5,
+									ruby: 0,
+									diamond: 0, 
+								},
+								tier: 2,
+								type: "ruby",
+								points: 2,
+								id:42,
+							},
+							{
+								tokens: {
+									sapphire: 0,
+									emerald: 0,
+									onyx: 5,
+									ruby: 0,
+									diamond: 3, 
+								},
+								tier: 2,
+								type: "ruby",
+								points: 2,
+								id:43,
+							},
+							{
+								tokens: {
+									sapphire: 0,
+									emerald: 0,
+									onyx: 0,
+									ruby: 6,
+									diamond: 0, 
+								},
+								tier: 2,
+								type: "ruby",
+								points: 3,
+								id:44,
+							},
+							{
+								tokens: {
+									sapphire: 0,
+									emerald: 0,
+									onyx: 3,
+									ruby: 2,
+									diamond: 2, 
+								},
+								tier: 2,
+								type: "ruby",
+								points: 1,
+								id:45,
+							},
+							{
+								tokens: {
+									sapphire: 0,
+									emerald: 0,
+									onyx: 3,
+									ruby: 2,
+									diamond: 2, 
+								},
+								tier: 2,
+								type: "ruby",
+								points: 1,
+								id:46,
+							},
+							{
+								tokens: {
+									sapphire: 2,
+									emerald: 3,
+									onyx: 3,
+									ruby: 0,
+									diamond: 0, 
+								},
+								tier: 2,
+								type: "sapphire",
+								points: 1,
+								id:47,
+							},
+							{
+								tokens: {
+									sapphire: 2,
+									emerald: 3,
+									onyx: 0,
+									ruby: 3,
+									diamond: 0, 
+								},
+								tier: 2,
+								type: "sapphire",
+								points: 1,
+								id:48,
+							},
+							{
+								tokens: {
+									sapphire: 6,
+									emerald: 0,
+									onyx: 0,
+									ruby: 0,
+									diamond: 0, 
+								},
+								tier: 2,
+								type: "sapphire",
+								points: 3,
+								id:49,
+							},
+							{
+								tokens: {
+									sapphire: 0,
+									emerald: 0,
+									onyx: 4,
+									ruby: 1,
+									diamond: 2, 
+								},
+								tier: 2,
+								type: "sapphire",
+								points: 2,
+								id:50,
+							},
+							{
+								tokens: {
+									sapphire: 5,
+									emerald: 0,
+									onyx: 0,
+									ruby: 0,
+									diamond: 0, 
+								},
+								tier: 2,
+								type: "sapphire",
+								points: 2,
+								id:51,
+							},
+							{
+								tokens: {
+									sapphire: 3,
+									emerald: 0,
+									onyx: 0,
+									ruby: 0,
+									diamond: 5, 
+								},
+								tier: 2,
+								type: "sapphire",
+								points: 2,
+								id:52,
+							},
+							{
+								tokens: {
+									sapphire: 0,
+									emerald: 0,
+									onyx: 0,
+									ruby: 5,
+									diamond: 0, 
+								},
+								tier: 2,
+								type: "diamond",
+								points: 2,
+								id:53,
+							},
+							{
+								tokens: {
+									sapphire: 0,
+									emerald: 1,
+									onyx: 2,
+									ruby: 4,
+									diamond: 0, 
+								},
+								tier: 2,
+								type: "diamond",
+								points: 2,
+								id:54,
+							},
+							{
+								tokens: {
+									sapphire: 0,
+									emerald: 0,
+									onyx: 3,
+									ruby: 5,
+									diamond: 0, 
+								},
+								tier: 2,
+								type: "diamond",
+								points: 2,
+								id:55,
+							},
+							{
+								tokens: {
+									sapphire: 0,
+									emerald: 3,
+									onyx: 2,
+									ruby: 2,
+									diamond: 0, 
+								},
+								tier: 2,
+								type: "diamond",
+								points: 1,
+								id:56,
+							},
+							{
+								tokens: {
+									sapphire: 0,
+									emerald: 0,
+									onyx: 0,
+									ruby: 0,
+									diamond: 6, 
+								},
+								tier: 2,
+								type: "diamond",
+								points: 3,
+								id:57,
+							},
+							{
+								tokens: {
+									sapphire: 3,
+									emerald: 0,
+									onyx: 0,
+									ruby: 3,
+									diamond: 2, 
+								},
+								tier: 2,
+								type: "diamond",
+								points: 1,
+								id:58,
+							},
+							{
+								tokens: {
+									sapphire: 2,
+									emerald: 3,
+									onyx: 0,
+									ruby: 0,
+									diamond: 3, 
+								},
+								tier: 2,
+								type: "onyx",
+								points: 1,
+								id:59,
+							},
+							{
+								tokens: {
+									sapphire: 0,
+									emerald: 3,
+									onyx: 2,
+									ruby: 0,
+									diamond: 3, 
+								},
+								tier: 2,
+								type: "onyx",
+								points: 1,
+								id:60,
+							},
+							{
+								tokens: {
+									sapphire: 0,
+									emerald: 0,
+									onyx: 6,
+									ruby: 0,
+									diamond: 0, 
+								},
+								tier: 2,
+								type: "onyx",
+								points: 3,
+								id:61,
+							},
+							{
+								tokens: {
+									sapphire: 1,
+									emerald: 4,
+									onyx: 0,
+									ruby: 2,
+									diamond: 0, 
+								},
+								tier: 2,
+								type: "onyx",
+								points: 2,
+								id:62,
+							},
+							{
+								tokens: {
+									sapphire: 0,
+									emerald: 0,
+									onyx: 0,
+									ruby: 0,
+									diamond: 5, 
+								},
+								tier: 2,
+								type: "onyx",
+								points: 2,
+								id:63,
+							},
+							{
+								tokens: {
+									sapphire: 0,
+									emerald: 5,
+									onyx: 0,
+									ruby: 3,
+									diamond: 0, 
+								},
+								tier: 2,
+								type: "onyx",
+								points: 2,
+								id:64,
+							},
+							{
+								tokens: {
+									sapphire: 0,
+									emerald: 6,
+									onyx: 0,
+									ruby: 0,
+									diamond: 0, 
+								},
+								tier: 2,
+								type: "emerald",
+								points: 3,
+								id:65,
+							},
+							{
+								tokens: {
+									sapphire: 0,
+									emerald: 5,
+									onyx: 0,
+									ruby: 0,
+									diamond: 0, 
+								},
+								tier: 2,
+								type: "emerald",
+								points: 2,
+								id:66,
+							},
+							{
+								tokens: {
+									sapphire: 2,
+									emerald: 0,
+									onyx: 1,
+									ruby: 0,
+									diamond: 4, 
+								},
+								tier: 2,
+								type: "emerald",
+								points: 2,
+								id:67,
+							},
+							{
+								tokens: {
+									sapphire: 0,
+									emerald: 2,
+									onyx: 0,
+									ruby: 3,
+									diamond: 3, 
+								},
+								tier: 2,
+								type: "emerald",
+								points: 1,
+								id:68,
+							},
+							{
+								tokens: {
+									sapphire: 3,
+									emerald: 0,
+									onyx: 2,
+									ruby: 0,
+									diamond: 2, 
+								},
+								tier: 2,
+								type: "emerald",
+								points: 1,
+								id:69,
+							},
+							{
+								tokens: {
+									sapphire: 5,
+									emerald: 3,
+									onyx: 0,
+									ruby: 0,
+									diamond: 0, 
+								},
+								tier: 2,
+								type: "emerald",
+								points: 2,
+								id:70,
+							},
+							{
+								tokens: {
+									sapphire: 3,
+									emerald: 0,
+									onyx: 3,
+									ruby: 3,
+									diamond: 5, 
+								},
+								tier: 3,
+								type: "emerald",
+								points: 3,
+								id:71,
+							},
+							{
+								tokens: {
+									sapphire: 7,
+									emerald: 0,
+									onyx: 0,
+									ruby: 0,
+									diamond: 0, 
+								},
+								tier: 3,
+								type: "emerald",
+								points: 4,
+								id:72,
+							},
+							{
+								tokens: {
+									sapphire: 6,
+									emerald: 3,
+									onyx: 0,
+									ruby: 0,
+									diamond: 3, 
+								},
+								tier: 3,
+								type: "emerald",
+								points: 4,
+								id:73,
+							},
+							{
+								tokens: {
+									sapphire: 7,
+									emerald: 3,
+									onyx: 0,
+									ruby: 0,
+									diamond: 0, 
+								},
+								tier: 3,
+								type: "emerald",
+								points: 5,
+								id:74,
+							},
+							{
+								tokens: {
+									sapphire: 3,
+									emerald: 5,
+									onyx: 0,
+									ruby: 3,
+									diamond: 3, 
+								},
+								tier: 3,
+								type: "onyx",
+								points: 3,
+								id:75,
+							},
+							{
+								tokens: {
+									sapphire: 0,
+									emerald: 0,
+									onyx: 0,
+									ruby: 7,
+									diamond: 0, 
+								},
+								tier: 3,
+								type: "onyx",
+								points: 4,
+								id:76,
+							},
+							{
+								tokens: {
+									sapphire: 0,
+									emerald: 3,
+									onyx: 3,
+									ruby: 6,
+									diamond: 0, 
+								},
+								tier: 3,
+								type: "onyx",
+								points: 4,
+								id:77,
+							},
+							{
+								tokens: {
+									sapphire: 0,
+									emerald: 0,
+									onyx: 3,
+									ruby: 7,
+									diamond: 0, 
+								},
+								tier: 3,
+								type: "onyx",
+								points: 4,
+								id:78,
+							},
+							{
+								tokens: {
+									sapphire: 5,
+									emerald: 3,
+									onyx: 3,
+									ruby: 0,
+									diamond: 3, 
+								},
+								tier: 3,
+								type: "ruby",
+								points: 3,
+								id:79,
+							},
+							{
+								tokens: {
+									sapphire: 0,
+									emerald: 7,
+									onyx: 0,
+									ruby: 0,
+									diamond: 0, 
+								},
+								tier: 3,
+								type: "ruby",
+								points: 4,
+								id:80,
+							},
+							{
+								tokens: {
+									sapphire: 3,
+									emerald: 6,
+									onyx: 0,
+									ruby: 3,
+									diamond: 0, 
+								},
+								tier: 3,
+								type: "ruby",
+								points: 4,
+								id:81,
+							},
+							{
+								tokens: {
+									sapphire: 0,
+									emerald: 7,
+									onyx: 0,
+									ruby: 3,
+									diamond: 0, 
+								},
+								tier: 3,
+								type: "ruby",
+								points: 5,
+								id:82,
+							},
+							{
+								tokens: {
+									sapphire: 0,
+									emerald: 3,
+									onyx: 5,
+									ruby: 3,
+									diamond: 3, 
+								},
+								tier: 3,
+								type: "sapphire",
+								points: 3,
+								id:83,
+							},
+							{
+								tokens: {
+									sapphire: 0,
+									emerald: 0,
+									onyx: 0,
+									ruby: 0,
+									diamond: 7, 
+								},
+								tier: 3,
+								type: "sapphire",
+								points: 4,
+								id:84,
+							},
+							{
+								tokens: {
+									sapphire: 3,
+									emerald: 0,
+									onyx: 3,
+									ruby: 0,
+									diamond: 6, 
+								},
+								tier: 3,
+								type: "sapphire",
+								points: 4,
+								id:85,
+							},
+							{
+								tokens: {
+									sapphire: 3,
+									emerald: 0,
+									onyx: 0,
+									ruby: 0,
+									diamond: 7, 
+								},
+								tier: 3,
+								type: "sapphire",
+								points: 5,
+								id:86,
+							},
+							{
+								tokens: {
+									sapphire: 3,
+									emerald: 3,
+									onyx: 3,
+									ruby: 5,
+									diamond: 0, 
+								},
+								tier: 3,
+								type: "diamond",
+								points: 3,
+								id:87,
+							},
+							{
+								tokens: {
+									sapphire: 0,
+									emerald: 0,
+									onyx: 6,
+									ruby: 3,
+									diamond: 3, 
+								},
+								tier: 3,
+								type: "diamond",
+								points: 4,
+								id:88,
+							},
+							{
+								tokens: {
+									sapphire: 0,
+									emerald: 0,
+									onyx: 7,
+									ruby: 0,
+									diamond: 0, 
+								},
+								tier: 3,
+								type: "diamond",
+								points: 4,
+								id:89,
+							},
+							{
+								tokens: {
+									sapphire: 0,
+									emerald: 0,
+									onyx: 7,
+									ruby: 0,
+									diamond: 3, 
+								},
+								tier: 3,
+								type: "diamond",
+								points: 5,
+								id:90,
+							},
+						],
+						nobles: [
+							{
+								resources:{
+									sapphire:3,
+									emerald:3,
+									ruby:3,
+									onyx: 0,
+									diamond: 0, 
+								},
+								id:1,
+							},
+							{
+								resources:{
+									emerald:4,
+									sapphire:4,
+									onyx: 0,
+									ruby: 0,
+									diamond: 0, 
+								},
+								id:2,
+							},
+							{
+								resources:{
+									sapphire:3,
+									onyx:3,
+									diamond:3,
+									emerald: 0,
+									ruby: 0,
+								},
+								id:3,
+							},
+							{
+								resources:{
+									sapphire:4,
+									diamond:4,
+									emerald: 0,
+									onyx: 0,
+									ruby: 0,
+								},
+								id:4,
+							},
+							{
+								resources:{
+									sapphire:3,
+									emerald:3,
+									diamond:3,
+									onyx: 0,
+									ruby: 0,
+								},
+								id:5,
+							},
+							{
+								resources:{
+									onyx:3,
+									ruby:3,
+									emerald:3,
+									sapphire: 0,
+									diamond: 0, 
+								},
+								id:6,
+							},
+							{
+								resources:{
+									onyx:3,
+									ruby:3,
+									diamond:3,
+									sapphire: 0,
+									emerald: 0,
+								},
+								id:7,
+							},
+							{
+								resources:{
+									onyx:4,
+									ruby:4,
+									sapphire: 0,
+									emerald: 0,
+									diamond: 0, 
+								},
+								id:8,
+							},
+							{
+								resources:{
+									onyx:4,
+									diamond:3,
+									sapphire: 0,
+									emerald: 0,
+									ruby: 0,
+								},
+								id:9,
+							},
+							{
+								resources:{
+									ruby:4,
+									emerald:4,
+									sapphire: 0,
+									onyx: 0,
+									diamond: 0, 
+								},
+								id:10,
+							},
+						],
+						tokens: {
+							gold: 5,
+							sapphire: 7,
+							emerald: 7,
+							onyx: 7,
+							ruby: 7,
+							diamond: 7, 
+						}, 
+					},
+					player1: {
+						 cards: [],
+						 isactive:true,
+						 tokens: {
+							gold: 0,
+							sapphire: 0,
+							emerald: 0,
+							onyx: 0,
+							ruby: 0,
+							diamond: 0, 
+						},
+						pricereduction: {
+							gold: 0,
+							sapphire: 0,
+							emerald: 0,
+							onyx: 0,
+							ruby: 0,
+							diamond: 0, 
+						},
+						nobles: [],
+						reservedCards:[],
+						points: 0,
+					},
+					player2: { 
+						cards: [],
+						isactive:false,
+						tokens: {
+							gold: 0,
+							sapphire: 0,
+							emerald: 0,
+							onyx: 0,
+							ruby: 0,
+							diamond: 0, 
+						},
+						pricereduction: {
+							gold: 0,
+							sapphire: 0,
+							emerald: 0,
+							onyx: 0,
+							ruby: 0,
+							diamond: 0, 
+						},
+						nobles: [],
+						reservedCards:[],
+						points: 0, 
+					},
+					player3: { 
+						cards: [],
+						isactive:false,
+						tokens: {
+							gold: 0,
+							sapphire: 0,
+							emerald: 0,
+							onyx: 0,
+							ruby: 0,
+							diamond: 0,
+							 
+						},
+						pricereduction: {
+							gold: 0,
+							sapphire: 0,
+							emerald: 0,
+							onyx: 0,
+							ruby: 0,
+							diamond: 0, 
+						},
+						nobles: [], 
+						reservedCards:[],
+						points: 0,
+					},
+					player4: { 
+						cards: [],
+						isactive:false,
+						tokens: {
+							gold: 0,
+							sapphire: 0,
+							emerald: 0,
+							onyx: 0,
+							ruby: 0,
+							diamond: 0, 
+						},
+						pricereduction: {
+							gold: 0,
+							sapphire: 0,
+							emerald: 0,
+							onyx: 0,
+							ruby: 0,
+							diamond: 0, 
+						},
+						nobles: [], 
+						reservedCards:[],
+						points: 0,
+					},
+					images: {
+						1:{
+							sapphire:'url(images/Front_1_albastru.jpg)',
+							ruby:'url(images/Front_1_rosu.jpg)',
+							onyx:'url(images/Front_1_negru.jpg)',
+							emerald:'url(images/Front_1_verde.jpg)',
+							diamond:'url(images/Front_1_alb.jpg)',
+							back:'url(images/back1.jpg)',
+						},
+						2:{
+							sapphire:'url(images/Front_2_albastru.jpg)',
+							ruby:'url(images/Front_2_rosu.jpg)',
+							onyx:'url(images/Front_2_negru.jpg)',
+							emerald:'url(images/Front_2_verde.jpg)',
+							diamond:'url(images/Front_2_alb.jpg)',
+							back:'url(images/back2.jpg)',
+						},
+						3:{
+							sapphire:'url(images/Front_3_albastru.jpg)',
+							ruby:'url(images/Front_3_rosu.jpg)',
+							onyx:'url(images/Front_3_negru.jpg)',
+							emerald:'url(images/Front_3_verde.jpg)',
+							diamond:'url(images/Front_3_alb.jpg)',
+							back:'url(images/back3.jpg)',
+						},
+						nobles:{
+							1:'url(images/Nobil_1.jpg)',
+							2:'url(images/Nobil_2.jpg)',
+							3:'url(images/Nobil_3.jpg)',
+							4:'url(images/Nobil_4.jpg)',
+							5:'url(images/Nobil_5.jpg)',
+							6:'url(images/Nobil_6.jpg)',
+							7:'url(images/Nobil_7.jpg)',
+							8:'url(images/Nobil_8.jpg)',
+							9:'url(images/Nobil_9.jpg)',
+							10:'url(images/Nobil_10.jpg)',
+						},
+					},
+					imagesr: {
+						1:{
+							sapphire:'url(images/Front_1_albastrur.jpg)',
+							ruby:'url(images/Front_1_rosur.jpg)',
+							onyx:'url(images/Front_1_negrur.jpg)',
+							emerald:'url(images/Front_1_verder.jpg)',
+							diamond:'url(images/Front_1_albr.jpg)',
+							back:'url(images/back1r.jpg)',
+						},
+						2:{
+							sapphire:'url(images/Front_2_albastrur.jpg)',
+							ruby:'url(images/Front_2_rosur.jpg)',
+							onyx:'url(images/Front_2_negrur.jpg)',
+							emerald:'url(images/Front_2_verder.jpg)',
+							diamond:'url(images/Front_2_albr.jpg)',
+							back:'url(images/back2r.jpg)',
+						},
+						3:{
+							sapphire:'url(images/Front_3_albastrur.jpg)',
+							ruby:'url(images/Front_3_rosur.jpg)',
+							onyx:'url(images/Front_3_negrur.jpg)',
+							emerald:'url(images/Front_3_verder.jpg)',
+							diamond:'url(images/Front_3_albr.jpg)',
+							back:'url(images/back3r.jpg)',
+						},
+					},
+
+				};
+			},
+
+			render: function() {
+				return (
+					<div>
+						<Player
+							 player={this.state.player1} 
+							 images={this.state.images} 
+							 game={this.state.game}
+							 images={this.state.imagesr}/>
+						<Board 
+							bank={this.state.bank} 
+							game={this.state.game}
+							tokenstotake={this.tokenstotake}
+							taketokens={this.taketokens}
+							cleartake={this.cleartake}
+							selectcard={this.selectcard}
+							buycard={this.buycard}
+							reservecard={this.reservecard}
+							images={this.state.images}
+							imagesr={this.state.imagesr}
+							getactiveplayer={this.getactiveplayer}/>
+						<Player 
+							player={this.state.player2} 
+							images={this.state.images} 
+							game={this.state.game}
+							images={this.state.imagesr}/>
+					</div>
+				);
+			},
+
+			componentWillMount: function() {
+		   		this.initializegame();
+		    },
+			
+			tokenstotake: function(event) {//alternative????
+				this.state.game.tokens[event.target.value]++;
+				this.setState({
+					game:this.state.game,
+				});
+				
+				
+			},
+
+			taketokens: function() {
+				if(this.takeisvalid()===1){
+					//clone deep????????
+					var player =this.getactiveplayer();//get active
+					var bank = this.state.bank;
+					var game = this.state.game;
+					_.forIn(this.state.game.tokens, function(value, key) {//scad din banca si pun la jucator
+		  				bank.tokens[key]-=value;
+		  				player.tokens[key]+=value;
+		  				game.tokens[key]-=value;
+					});
+					this.setState({
+						bank: bank,
+						player: player,
+						game: game,
+					});
+					this.cleartake();
+					this.endturn();
+				}
+				else
+					alert('Please select 2 tokens of the same gem or 3 different ones!');
+			},
+
+			takeisvalid: function() {
+				var player =this.getactiveplayer();//get active
+				var bank=this.state.bank;
+				var banktokens=0;
+				var playertokens=0;
+				var numberoftokens=0;
+				var twotaken=false;
+				var ok=true;
+				_.forIn(this.state.game.tokens, function(value, key) {
+					if(bank.tokens[key]-value<0){//banca ramane fara
+						ok=false;
+					}
+					if(value>2){//mai mult de 2 jetoane identice
+						ok=false;
+					}
+					if(value==2){
+						twotaken=true;
+					}
+					numberoftokens+=value;
+					playertokens+=player.tokens[key];
+					banktokens+=bank.tokens[key];
+				});
+				
+				if(banktokens==2&&numoftokens==2||banktokens==1&&numoftokens==1){//daca banca are 1 sau 2 jetoane
+					return 1;
+				}
+				if(ok===false){
+					return 0;
+				}
+				if(twotaken===true&&numberoftokens>=3){//2 jetoane identice si ai luat mai mult de 2
+					return 0;
+				}
+				if(playertokens+numberoftokens>10){//ai prea multe
+					return 0;
+				}
+				if(numberoftokens>3){//prea multe jetoane luate
+					return 0;
+				}
+
+
+				if(playertokens+numberoftokens<10&&numberoftokens!=3&&twotaken===false){//prea putine
+					return 0;
+				}
+				return 1;
+
+
+			},
+
+			cleartake: function() {//pun 0 in jetoane luate
+				game=this.state.game;
+				_.forIn(this.state.game.tokens, function(value, key) {//scad la 0
+					game.tokens[key]-=value;
+				});
+				this.setState({
+					game: game,
+				});
+			},
+
+			getactiveplayer: function() {
+				if(this.state.player1.isactive){
+					return this.state.player1;
+				}
+				else
+					if(this.state.player2.isactive) {
+						return this.state.player2;
+					}
+					else
+						if(this.state.player3.isactive) {
+							return this.state.player3;
+						}
+						else
+							if(this.state.player4.isactive) {
+								return this.state.player4;
+							}
+			},
+
+			changeactiveplayer: function() {
+				if(this.state.game.turn%this.state.game.numofplayers===0){
+					this.state.player1.isactive=true;
+					this.state.player2.isactive=false;
+					this.state.player3.isactive=false;
+					this.state.player4.isactive=false;
+				}
+				if(this.state.game.turn%this.state.game.numofplayers===1) {
+					this.state.player1.isactive=false;
+					this.state.player2.isactive=true;
+					this.state.player3.isactive=false;
+					this.state.player4.isactive=false;
+				}
+				if(this.state.game.turn%this.state.game.numofplayers===2) {
+					this.state.player1.isactive=false;
+					this.state.player2.isactive=false;
+					this.state.player3.isactive=true;
+					this.state.player4.isactive=false;
+				}
+				if(this.state.game.turn%this.state.game.numofplayers===3) {
+					this.state.player1.isactive=false;
+					this.state.player2.isactive=false;
+					this.state.player3.isactive=false;
+					this.state.player4.isactive=true;
+				}
+
+			},
+
+			winningCondition: function(){
+				player=this.getactiveplayer();
+				if(player.points>=15){
+					this.state.game.lastTurn=true;
+					this.setState({
+						game: this.state.game,
+					});
+				}
+			},
+
+			endturn: function() {
+				this.getnoble();
+				this.winningCondition();
+				if(this.state.game.lastTurn==true){
+					if((this.state.game.turn+1)%this.state.game.numofplayers==0)//se termina cand joaca ultimul jucator
+						alert('The game has ended!');
+				}
+				this.state.game.turn++;
+				this.setState({
+					game: this.state.game,
+				});
+				console.log(this.state.player1);
+				this.changeactiveplayer();
+			},
+
+			getnoble: function() {
+				player=this.getactiveplayer();
+				console.log("sasdfasf",player);
+				bank=this.state.game;//eroare nobili trebuiau sa fie in game nu bank
+				var isvalid;
+				if(player.nobles.length==0) {
+					for(i=0;i<bank.nobles.length;i++) {//parte de validare
+						isvalid=true;
+						_.forIn(bank.nobles[i].resources , function(value, key) {
+		  					if(value>player.pricereduction[key])
+		  						isvalid=false;
+						});
+						if(isvalid==true) {//luare nobil
+							var noble = _.remove(bank.nobles, function(person) {//remove card
+		  						return person == bank.nobles[i] ;
+							});
+							player.nobles[0]=noble[0];
+							player.points+=3;
+							console.log("puncte nobil",player.points)
+							break;
+						}
+					}
+					this.setState({
+						game: bank,
+					});
+
+				}
+			},
+
+			initializetierxcards: function(tier) {
+				var bank = this.state.bank;
+				var game = this.state.game;
+				var deck= _.filter(bank.cards, function(card) {
+		 			return card.tier==tier ;
+				});
+				var newcard;
+				var changecard;
+				var newcaed;
+				for(var i=0;i<4;i++){
+					newcard=Math.floor((Math.random() * (deck.length-1)));
+					if(newcard>=0) {
+						changecard = _.remove(bank.cards, function(card) {//remove card
+							return card.id == deck[newcard].id;
+						});
+						 _.remove(deck, function(card) {//remove card si din deck meu
+							return card.id == deck[newcard].id;
+						});
+						game.cards[game.cards.length]=changecard[0];
+					}
+				}
+				this.setState({
+					bank: bank,
+					game: game,
+				});
+
+			},
+
+			initializegame: function() {
+				this.initializebank();
+				this.initializenobles();
+				this.initializetierxcards(1);
+				this.initializetierxcards(2);
+				this.initializetierxcards(3);
+			},
+
+			initializebank: function() {
+				bank=this.state.bank;
+				var number;
+				if(this.state.game.numofplayers===2)
+					number=3;
+				if(this.state.game.numofplayers===3)
+					number=1;
+				_.forIn(this.state.bank.tokens, function(value, key) {
+					if(key!=="gold")
+						bank.tokens[key]-=number;
+				});
+			},
+
+			initializenobles: function() {
+				var bank = this.state.bank;
+				var game = this.state.game;
+				var number;
+				if(this.state.game.numofplayers==2){
+					number=3;
+				}
+				else{
+					if(this.state.game.numofplayers==2){
+						number=4;
+					}
+					else{
+						number=5;
+					}
+				}
+				for(var i=0;i<number;i++){
+					newnoble=Math.floor((Math.random() * (bank.nobles.length-1)));
+					if(newnoble>=0) {
+						changenoble = _.pullAt(bank.nobles, newnoble);
+						game.nobles[game.nobles.length]=changenoble[0];
+					}
+				}
+				this.setState({
+					bank: bank,
+					game: game,
+				});
+			},
+
+			selectcard:function(event) {
+				
+
+				this.state.game.selectedcardid = event.currentTarget.id;
+				// de adaugat clasa "selected" pe div-ul cartii selectate
+				this.setState({
+					game: this.state.game,
+				});
+				console.log(this.state.game.selectedcardid);
+			},
+
+			buycard:function() {//bonus points ca nu pot cumpara carti rezervate
+				if(this.cardIsReserved()){
+						alert('Reserved Card!');
+						this.buyReserved();
+						this.endturn();
+				}
+				else {
+					if (this.cardisbuyable()===true) {
+					var player =this.getactiveplayer();//get active
+					var bank = this.state.bank;
+					var game = this.state.game;
+					var cost = this.cardcost();
+					_.forIn(cost, function(value, key) {//scad din banca si pun la jucator
+		  				bank.tokens[key]+=value;
+		  				player.tokens[key]-=value;
+					});
+					var changecard = _.remove(game.cards, function(card) {//remove card
+		  				return card.id == game.selectedcardid;
+					});
+					console.log(changecard);
+					player.cards[player.cards.length]=changecard[0];//add card
+					player.pricereduction[changecard[0].type]++;//reduce price 
+					player.points+=changecard[0].points;//add points
+					var i;
+					console.log(game.cards);
+					var deck= _.filter(bank.cards, function(card) {
+			 				return card.tier==changecard[0].tier ;
+					});
+					console.log("pachet",deck,"cu l=",deck.length);
+					var newcard=Math.floor((Math.random() * (deck.length-1)));
+					if(newcard>=0) {
+
+						//game.tier1id=deck[newcard].id;
+						var changecard = _.remove(bank.cards, function(card) {//remove card
+								return card.id == deck[newcard].id;
+						});
+						console.log("New card ",changecard);
+						console.log("Cards tier 1 ",game.cards);
+						game.cards[game.cards.length]=changecard[0];
+					}
+					
+					game.selectedcardid=-1;//reinit select
+					this.setState({
+						bank: bank,
+						player: player,
+						game: game,
+					});
+					this.endturn();
+				}
+				else{
+						alert("Cannot buy!");
+					}
+					}
+					
+					
+			},
+			cardIsReserved: function() {
+				var player =this.getactiveplayer();//get active
+				var bank = this.state.bank;
+				var game = this.state.game;
+				var x=_.findIndex(player.reservedCards, function(card) {
+ 					return card.id == game.selectedcardid;
+				});
+				if(x!==-1){
+					return true;
+				}
+				return false;
+			},
+
+			buyReserved: function() {
+				var player =this.getactiveplayer();//get active
+				var bank = this.state.bank;
+				var game = this.state.game;
+				var card=_.find(player.reservedCards, function(card) {
+		  			return card.id == game.selectedcardid;
+				})
+				var cost={
+					gold: 0,
+					sapphire: 0,
+					emerald: 0,
+					onyx: 0,
+					ruby: 0,
+					diamond: 0, 
+				};
+				_.forIn(cost, function(value, key) {//scad din banca si pun la jucator foarte ciudat ce e eaici
+					if(key!=="gold") {
+						cost[key]-=player.pricereduction[key];
+						cost[key]+=card.tokens[key];
+						if(cost[key] > player.tokens[key]){
+							cost['gold']+=cost[key]-player.tokens[key];
+							cost[key]=player.tokens[key];
+						}
+						if(cost[key]<0){
+							cost[key]=0;
+						}
+					}
+				});
+				if(cost.gold<=player.tokens.gold){
+				_.forIn(cost, function(value, key) {//scad din banca si pun la jucator
+		  				bank.tokens[key]+=value;
+		  				player.tokens[key]-=value;
+					});
+					var changecard = _.remove(player.reservedCards, function(card) {//remove card
+		  				return card.id == game.selectedcardid;
+					});
+					console.log(changecard);
+					player.cards[player.cards.length]=changecard[0];//add card
+					player.pricereduction[changecard[0].type]++;//reduce price 
+					player.points+=changecard[0].points;//add points
+				}
+				this.setState({
+					game: this.state.game,
+				});
+
+			},
+
+			reservecard: function() {//full of bugssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss
+				var player =this.getactiveplayer();//get active
+				var bank = this.state.bank;
+				var game = this.state.game;
+				if(player.reservedCards.length<3)
+				{
+					var changecard = _.remove(game.cards, function(card) {//remove card
+							return card.id == game.selectedcardid;
+					});
+					console.log(changecard);
+					player.reservedCards[player.reservedCards.length]=changecard[0];//add card
+					if(bank.tokens.gold>0){
+						bank.tokens.gold--;
+						player.tokens.gold++;
+					}
+					var i;
+					console.log(game.cards);
+					var deck= _.filter(bank.cards, function(card) {
+				 		return card.tier==changecard[0].tier ;
+					});
+					console.log("Deck ",deck,"with l = ",deck.length);
+					var newcard=Math.floor((Math.random() * (deck.length-1)));
+						if(newcard>=0) {
+
+							//game.tier1id=deck[newcard].id;
+							var changecard = _.remove(bank.cards, function(card) {//remove card
+									return card.id == deck[newcard].id;
+							});
+							console.log("New card ",changecard);
+							console.log("Cards tier 1 ",game.cards);
+							game.cards[game.cards.length]=changecard[0];
+							alert('New card!');
+						}
+						
+						game.selectedcardid=-1;//reinit select
+						this.setState({
+							bank: bank,
+							player: player,
+							game: game,
+						});
+						this.endturn();
+				}
+				else{
+					alert('Error!');
+				}
+			},
+
+			cardcost: function() {
+				var player =this.getactiveplayer();//get active
+				var bank = this.state.bank;
+				var game = this.state.game;
+				var card=_.find(this.state.game.cards, function(card) {
+		  			return card.id == game.selectedcardid;
+				})
+				var cost={
+					gold: 0,
+					sapphire: 0,
+					emerald: 0,
+					onyx: 0,
+					ruby: 0,
+					diamond: 0, 
+				};
+				_.forIn(cost, function(value, key) {//scad din banca si pun la jucator foarte ciudat ce e eaici
+					if(key!=="gold") {
+						cost[key]-=player.pricereduction[key];
+						cost[key]+=card.tokens[key];
+						if(cost[key] > player.tokens[key]){
+							cost['gold']+=cost[key]-player.tokens[key];
+							cost[key]=player.tokens[key];
+						}
+						if(cost[key]<0){
+							cost[key]=0;
+						}
+					}
+				});
+				return cost;
+			},
+
+			cardisbuyable: function() {
+				if(this.state.game.selectedcardid<0)
+					return false;
+				cost=this.cardcost();
+				var player =this.getactiveplayer();
+				if(cost.gold>player.tokens.gold){
+					return false;
+				}				
+				return true;
+			},
+
+			
+			
+		});
+
+		var Player = React.createClass({
+
+			render: function() {
+				return (
+					<div >	
+						{this.renderplayercards()}
+						{this.renderplayertokens()}
+						<div className="clear"></div>
+					</div>
+				);
+			},
+
+			renderplayertokens: function() {//modificari no idea de ce se suprascrie hide si de unde
+				return(
+					<div>
+						<ul className="bank playerTokens">
+							<li className={"bankEmerald bankPoints"+(this.props.player.tokens.emerald==0 ? " hide" : "")}>
+								{this.props.player.tokens.emerald}
+							</li>
+							<li className={"bankSapphire bankPoints"+(this.props.player.tokens.sapphire==0 ? " hide" : "")}>
+								{this.props.player.tokens.sapphire}
+							</li>
+							<li className={"bankOnyx bankPoints"+(this.props.player.tokens.onyx==0 ? " hide" : "")}>
+								{this.props.player.tokens.onyx}
+							</li>					
+							<li className={"bankRuby bankPoints"+(this.props.player.tokens.ruby==0 ? " hide" : "")}>
+								{this.props.player.tokens.ruby}
+							</li>						
+							<li className={"bankDiamond bankPoints"+(this.props.player.tokens.diamond==0 ? " hide" : "")}>
+								{this.props.player.tokens.diamond}
+							</li>						
+							<li className={"bankJoker bankPoints"+(this.props.player.tokens.gold==0 ? " hide" : "")}>
+								{this.props.player.tokens.gold}
+							</li>												
+						</ul>
+					</div>
+				);
+			},
+			renderplayercards: function() {// sa calculezi nr carti si sa modifici width pe divurile playerBox // spatiul dintre 2 carti e 28px si toata cartea e 
+					return(
+						<div className="playerContainer">
+							<div className="playerStack">
+								{this.renderownedcards("emerald")}
+							</div>
+							<div className="playerStack">
+								{this.renderownedcards("sapphire")}
+							</div>
+							<div className="playerStack">
+								{this.renderownedcards("onyx")}
+							</div>
+							<div className="playerStack">
+								{this.renderownedcards("ruby")}
+							</div>
+							<div className="playerStack">
+								{this.renderownedcards("diamond")}
+							</div>
+							<div className="clear"></div>
+						</div>
+					);
+				
+			},
+			renderownedcards: function(res) {
+				deck= _.filter(this.props.player.cards, function(card) {
+			 				return card.type==res ;
+					});
+				var that=this;
+				return deck.map(function(card){
+					return(
+						 <div style={{backgroundImage: that.props.images["1"][res] }}>
+						 	<span className="points playerPoints">{card.points||"\u00a0"}</span>
+						 </div>
+						);
+				});
+			}
+
+		});
+
+
+		var Board = React.createClass({
+			
+			render: function() {//asta trebuia sa dea eroare cu cartile  mele rezervate ,ask luni
+				return (
+					<div>
+						{this.renderbanktokens()}
+						<div className="wrapper">
+							<div className="side1">{this.renderbanknobles()}</div>
+							<div className="main">
+								<div>
+									<div className="backCard" >{this.rendertierxback(1)}</div>
+									{this.rendertierxcards(1)}
+			          				<div className="reserved" > {this.renderReservedCards(1)} </div>
+								</div>
+								<div>
+									<div className="backCard" >{this.rendertierxback(2)}</div>
+									{this.rendertierxcards(2)}
+									<div className="reserved" >{this.renderReservedCards(2)} </div>
+								</div>
+								<div>
+									<div className="backCard" >{this.rendertierxback(3)}</div>
+									{this.rendertierxcards(3)}	
+									<div className="reserved" >{this.renderReservedCards(3)} </div>
+								</div>
+							</div>	
+						</div>
+						<div className="buttonsCenter">
+							<button onClick={this.props.buycard}>buy</button>
+							<button onClick={this.props.reservecard}>reserve</button>
+
+						</div>
+					</div>
+				)
+			},
+
+			renderbanktokens: function() {
+				return(
+					<div>
+						<ul  className="bank">
+							<li className="bankEmerald bankPoints">{this.props.bank.tokens.emerald}</li>
+								<button value="emerald" onClick={this.props.tokenstotake} >&#43;</button><span className="bankSelectedTokens"> {this.props.game.tokens.emerald}</span>
+							<li className="bankSapphire bankPoints">{this.props.bank.tokens.sapphire}</li>
+								<button value="sapphire" onClick={this.props.tokenstotake} >&#43;</button><span className="bankSelectedTokens">{this.props.game.tokens.sapphire}</span>
+							<li className="bankOnyx bankPoints">{this.props.bank.tokens.onyx}</li>
+								<button value="onyx" onClick={this.props.tokenstotake} >&#43;</button><span className="bankSelectedTokens">{this.props.game.tokens.onyx}</span>					
+							<li className="bankRuby bankPoints">{this.props.bank.tokens.ruby}</li>
+								<button value="ruby" onClick={this.props.tokenstotake} >&#43;</button><span className="bankSelectedTokens">{this.props.game.tokens.ruby}</span>						
+							<li className="bankDiamond bankPoints">{this.props.bank.tokens.diamond}</li>
+								<button value="diamond" onClick={this.props.tokenstotake} >&#43;</button><span className="bankSelectedTokens">{this.props.game.tokens.diamond}</span>						
+							<li className="bankJoker bankPoints">{this.props.bank.tokens.gold}</li>												
+						</ul>	
+						<div className="buttonsCenter">
+							<button onClick={this.props.taketokens}>Submit</button>					
+							<button onClick={this.props.cleartake}>Clear</button>
+							<div className="currentPlayer"> Player {(this.props.game.turn%2)+1}`s turn </div>
+						</div>
+					</div>
+				);
+			},
+
+			rendertierxback: function(tier) {
+				if(tier===1)
+					stringtier='1';
+				if(tier===2)
+					stringtier='2';
+				if(tier===3)
+					stringtier='3';
+				if(_.find(this.props.game.cards, function(card){
+					return card.tier==tier;
+				}))
+					return(
+          					<div className="card" style={{backgroundImage: this.props.images[stringtier]["back"] }}>
+							
+							</div>
+          				);
+				else//implement hidden
+					return(
+          					<div className="card hidden" style={{backgroundImage: 'url(images/Front_1_albastru.jpg)' }}>
+								
+							</div>
+          				);
+			},
+
+			rendertierxcards: function(tier) {
+				game=this.props.game;
+				that=this;
+				if(tier===1)
+					stringtier='1';
+				if(tier===2)
+					stringtier='2';
+				if(tier===3)
+					stringtier='3';
+				selectcard=this.props.selectcard;
+				deck= _.filter(game.cards, function(card) {
+			 				return card.tier==tier ;
+					});
+				return deck.map(function(card) {
+          				return(
+          					<div 
+          						className={"card"+(card.id==game.selectedcardid ? " selected" : "")} 
+          						key={card.id} 
+          						id={card.id} 
+          						onClick={selectcard} 
+          						style={{backgroundImage: that.props.images[stringtier][card.type] }}>
+								<div className="points">{card.points||"\u00a0"}</div>
+								<ul className="costList">
+									<li className={"cost onyx"+(card.tokens.onyx==0 ? " hide" : "")}>{card.tokens.onyx}</li>
+									<li className={"cost diamond"+(card.tokens.diamond==0 ? " hide" : "")}>{card.tokens.diamond}</li>
+									<li className={"cost emerald"+(card.tokens.emerald==0 ? " hide" : "")}>{card.tokens.emerald}</li>
+									<li className={"cost sapphire"+(card.tokens.sapphire==0 ? " hide" : "")}>{card.tokens.sapphire}</li>
+									<li className={"cost ruby"+(card.tokens.ruby==0 ? " hide" : "")}>{card.tokens.ruby}</li>
+								</ul>
+							</div>
+          				);
+
+          			});
+
+          		
+          		
+        	
+				
+			},
+
+			renderReservedCards: function(number) {
+				var player=this.props.getactiveplayer();
+				selectcard=this.props.selectcard;
+				if(player.reservedCards[number-1]){
+					if(player.reservedCards[number-1].tier===1)
+						stringtier='1';
+					if(player.reservedCards[number-1].tier===2)
+						stringtier='2';
+					if(player.reservedCards[number-1].tier===3)
+						stringtier='3';
+					return(
+          					<div 
+          					className={"card"+(player.reservedCards[number-1].id==game.selectedcardid ? " selected" : "")} 
+          					style={{backgroundImage: this.props.images[stringtier][player.reservedCards[number-1].type] }}
+          					key={player.reservedCards[number-1].id} 
+          					id={player.reservedCards[number-1].id} 
+          					onClick={selectcard}>
+								<div className="points">{player.reservedCards[number-1].points||"\u00a0"}</div>
+								<ul className="costList">
+									<li className={"cost onyx"+(player.reservedCards[number-1].tokens.onyx==0 ? " hide" : "")}>
+										{player.reservedCards[number-1].tokens.onyx}
+									</li>
+									<li className={"cost diamond"+(player.reservedCards[number-1].tokens.diamond==0 ? " hide" : "")}>
+										{player.reservedCards[number-1].tokens.diamond}
+									</li>
+									<li className={"cost emerald"+(player.reservedCards[number-1].tokens.emerald==0 ? " hide" : "")}>
+										{player.reservedCards[number-1].tokens.emerald}
+									</li>
+									<li className={"cost sapphire"+(player.reservedCards[number-1].tokens.sapphire==0 ? " hide" : "")}>
+										{player.reservedCards[number-1].tokens.sapphire}
+									</li>
+									<li className={"cost ruby"+(player.reservedCards[number-1].tokens.ruby==0 ? " hide" : "")}>
+										{player.reservedCards[number-1].tokens.ruby}
+									</li>
+								</ul>
+							</div>
+          				);
+				}
+				else//implement hidden
+					return(
+          					<div className="card" style={{backgroundImage: 'url(images/reserved.jpg)' }}>
+								
+							</div>
+          				);
+			},
+			renderbanknobles: function() {//nobiliau nevoie de clasa
+				game=this.props.game;
+				that=this;
+				return game.nobles.map(function(noble) {
+					stringid=noble.id.toString();
+          				return(
+          					<div 
+          						className="noble" 
+          						style={{backgroundImage: that.props.images["nobles"][stringid] }}>
+								<div className="points">3</div>
+								<ul className="costList">
+									<li className={"cost onyx"+(noble.resources.onyx==0 ? " hide" : "")}>{noble.resources.onyx}</li>
+									<li className={"cost diamond"+(noble.resources.diamond==0 ? " hide" : "")}>{noble.resources.diamond}</li>
+									<li className={"cost emerald"+(noble.resources.emerald==0 ? " hide" : "")}>{noble.resources.emerald}</li>
+									<li className={"cost sapphire"+(noble.resources.sapphire==0 ? " hide" : "")}>{noble.resources.sapphire}</li>
+									<li className={"cost ruby"+(noble.resources.ruby==0 ? " hide" : "")}>{noble.resources.ruby}</li>
+								</ul>
+							</div>
+          				);
+
+          			});
+
+			},
+			
+			
+		});
+
+		var Rules = React.createClass({
+			render: function() {
+				return(
+					<div className="rules">
+						<h1>Aphador Rulebook</h1>
+
+						<h2>Game Setup</h2>
+						<div className="text">
+							<p>In Aphador, you take on the role of a rich merchant during the Renaissance. You will use your resources to acquire mines, transportation methods, and artisans who will allow you to turn raw gems into beautiful jewels. Shuffle each development card deck separately, and then place them in a column in the middle of the table in increasing order from bottom to top. Then reveal 4 cards from each level. Shuffle the noble tiles and reveal as many of them as there are players plus one (example: 5 tiles for a 4 player game). The remaining tiles are removed from the game; they will not be used during the game. Finally, place the tokens in 6 distinct piles (sort them by color) within reach of the players.</p>
+						</div>
+
+						<div className="row">
+							<h3>Game with 2 or 3 players</h3>
+							<div className="colLeft">
+								<h4>With 2 players</h4>
+								<div>
+									<p>Remove 3 tokens of each gem color (there should be only 4 of each remaining).</p>
+									<p>Don`t touch the gold.</p>
+									<p>Reveal 3 noble tiles.</p>
+								</div>
+							</div>
+							<div className="colRight">
+								<h4>With 3 players</h4>
+								<div>
+									<p>Remove 2 tokens of each gem color (there should be only 5 of each remaining).</p>
+									<p>Do not touch the gold.</p>
+									<p>Reveal 4 noble tiles.</p>
+								</div>
+							</div>
+							<div className="clear"></div>
+							<p>There are no other changes.</p>
+						</div>
+						<div className="divider"></div>
+
+						<h2>Game Overview</h2>
+						<div className="text">
+							<p>During the game, the players take gem and gold tokens. With these tokens, they purchase development cards, which are worth prestige points and/or bonuses. These bonuses allow players to purchase subsequent development cards for a lesser cost. When a player has enough bonuses, they immediately receive a visit from a noble (which is also worth prestige points). As soon as a player reaches 15 prestige points, the current turn ends and the player with the most prestige points is declared the winner.</p>
+						</div>
+
+						<h3>The development cards</h3>
+						<div className="text">
+							<p>To win prestige points, the players must purchase development cards. These cards are visible in the middle of the table and may be purchased by all players during the game. The developments in hand are the cards which the players reserve throughout the game. Developments in hand may only be purchased by the players holding them. The player who purchases this card wins 4 prestige points. Owning this card allows the player to benefit from a blue bonus. To purchase this card, the player must spend 3 blue tokens, 3 black tokens, and 6 white tokens.</p>
+						</div>
+								
+						<h3>The noble tiles</h3>
+						<div className="text">	
+							<p>The noble tiles are visible in the middle of the table. At the end of their turn, a player automatically receives the visit from a noble if that player has the amount of bonuses (and only bonuses) required, and they get the corresponding tile. A player cannot refuse a visit from a noble. Receiving a noble isn`t considered to be an action. Each noble tile is worth 3 prestige points, but players can only get a single one per turn. The player who acquires this noble`s tile gains 3 prestige points. If a player has enough development cards to amass 3 blue bonuses, 3 green bonuses, and 3 white bonuses, then that player automatically receives a visit from that noble.</p>
+						</div>
+
+						<h2>Game Rules</h2>
+						<div className="text">
+							<p>The youngest player begins. Play then proceeds clockwise. On their turn, a player must choose to perform only one of the following four actions.</p>
+							<ul>
+								<li>Take 3 gem tokens of different colors.</li>
+								<li>Take 2 gem tokens of the same color.</li>
+							</ul>
+							<p>This action is only possible if there are at least 4 tokens of the chosen color left when the player takes them.</p>
+							<ul>
+								<li>Reserve 1 development card and take 1 gold token (joker).</li>
+								<li>Purchase 1 face-up development card from the middle of the table or a previously reserved one.</li>
+							</ul>
+						</div>
+					
+						<h3>Selecting tokens</h3>
+						<div className="text">
+							<p>A player can never have more than 10 tokens at the end of their turn (including jokers). If this happens, they must return tokens until they only have 10 left. A player can return all or some of those they`ve just drawn. The tokens owned by a player must be visible by all players at all times.</p>
+							<p><span className="strong">Reminder:</span> players may not take 2 tokens of the same color if there are less than 4 tokens available of that color.</p>
+						</div>
+							
+						<h3>Reserve a development card</h3>
+						<div className="text">
+							<p>To reserve a card, a player simply needs to take a face-up development from the middle of the table or (if you`re feeling lucky) draw the first card from one of the three decks (level 1, 2, 3) without showing it to the other players. The reserved cards are kept in hand and cannot be discarded. Players may not have more than three reserved cards in hand, and the only way to get rid of a card is to buy it (see below). Reserving a card is also the only way to get a gold token (joker). If there is no gold left, you can still reserve a card, but you won`t get any gold.</p>
+						</div>
+							
+						<h3>Buying a development card</h3>
+						<div className="text">
+							<p>To purchase a card, a player must spend the number of tokens indicated on the card. A joker token can replace any color. The spent tokens (including any jokers) are returned to the middle of the table. A player may purchase one of the face-up development cards in the middle of the table or a card in his hand that was reserved on a previous turn. Each player makes distinct rows with the acquired development cards by sorting them by color, and staggering them vertically so that their bonuses and prestige point values are visible. The bonuses and prestige points granted by each card must be visible to all at all times.</p>
+							<p><span className="strong">Important:</span> when a development card from the middle of the table is acquired or reserved, it must immediately be replaced by a card of the same level.</p>
+							<p>At all times during the game, there must be 4 face-up cards of each level (unless the deck in question is empty, in which case the empty spaces also remain empty).</p>
+						</div>
+							
+						<h3>The bonuses</h3>
+						<div className="text">
+							<p>The bonuses a player has from development cards acquired on previous turns provide discounts on the purchase of new cards. Each bonus of a given color is equal to a token of that color. Thus, if a player has 2 blue bonuses and wants to purchase a card which costs 2 blue tokens and 1 green token, the player must only spend 1 green token. If a player has enough development cards (and therefore bonuses), they can even purchase a card without spending any tokens.</p>
+						</div>
+
+						<h3>The nobles</h3>
+						<div className="text">
+							<p>At the end of their turn, each player checks the noble tiles in order to determine if they`re receiving a visit from one of them. A player can be visited if they have (at least) the quantity and type of bonuses indicated on the noble tile. It is impossible to refuse the visit from a noble, which is not considered to be an action. If a player has enough bonuses to be visited by more than one noble at the end of their turn, that player chooses the noble to be received. The tile obtained is placed face-up in front of the player in question.</p>
+						</div>
+						<div className="divider"></div>
+
+						<h2>End of the game</h2>
+						<div className="text">
+							<p>When a player reaches 15 prestige points, complete the current round so that each player has played the same number of turns. The player who then has the highest number of prestige points is declared the winner (don`t forget to count your nobles). In case of a tie, the player who has purchased the fewest development cards wins.</p>
+						</div>
+			</div>
+			);
+			},
+		});
+
+
+		var NotFound = React.createClass({
+			render: function() {
+				return <h1 className="error">Page not found!</h1>
+			},
+		});
+
+		var routes = (
+			<Route handler={App} path="/">
+				<DefaultRoute name="home" handler={Game} />
+				<Route name="rules" path="/rules" handler={Rules} />
+				<NotFoundRoute handler={NotFound}/>
+			</Route>
+		);
+
+
+		Router.run(routes, function (Handler) {
+			React.render(<Handler/>, document.getElementById('app'));
+		});
+	</script>
+</body>
+</html>

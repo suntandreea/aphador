@@ -1,0 +1,59 @@
+.playerContainer {
+	margin:0 auto;
+	max-width: 1600px;
+	float:left;
+}
+
+.playerStack {
+	float:left;
+	padding: 10px;
+}
+
+.playerStack div{
+	background-repeat: no-repeat;
+	background-image: url(../images/Front_1_negrur.jpg);
+	border-radius: 8px;
+	width:128px;
+	height:100px;
+	float:left;
+	box-shadow: 3px 3px 5px rgba(0,0,0, 0.5);
+}
+
+.playerStack div:first-child {
+	margin: 0px;
+}
+
+.playerStack div:nth-child(2) {
+	margin-left: -100px;
+}
+
+.playerStack div:nth-child(3) {
+	margin-left: -100px;
+}
+
+.playerStack div:nth-child(4) {
+	margin-left: -100px;
+}
+
+.playerStack div:nth-child(5) {
+	margin-left: -100px;
+}
+
+.playerStack div:nth-child(6) {
+	margin-left: -100px;
+}
+
+.playerStack div:nth-child(7) {
+	margin-left: -100px;
+}
+
+.bank.playerTokens {
+	float:left;
+	margin: 30px 10px;
+	width:auto;
+}
+
+.playerPoints {
+	margin-top: 68px;
+	display:block;
+}
